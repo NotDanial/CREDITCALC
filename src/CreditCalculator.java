@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class CreditCalculator {
 
@@ -13,30 +14,34 @@ public class CreditCalculator {
         double totalSumPayed = 0;
         double startSumm;
         double overPay;
-        if ( task.length !=3) throw new Exception("throws Exception…");
+
+        if ( task.length !=4) throw new Exception("throws Exception…");
+
         credit =  Double.parseDouble(task[0]);
         payment =  Double.parseDouble(task[1]);
         percentage = Double.parseDouble(task[2]) / 100;
         clientType = task[3];
         startSumm = credit;
 
+        if ( payment <=0 || credit <=0 ) throw new Exception("throws Exception…");
+
         if (clientType.equals("human")){
+            if (12 * payment <= credit * percentage)  throw new Exception("throws Exception…");
             totalSumPayed = credit + credit * percentage;
             credit = credit + credit * percentage;
-        }else if (clientType.equals("business")){   // Тут специально поставил if что-бы было понятно.
+        }else if (clientType.equals("business")){
             credit = credit - 12 * payment;
             totalSumPayed = ( credit + credit * percentage ) + 12 * payment;
+            if (12 * payment <= credit * percentage)  throw new Exception("throws Exception…");
             credit = credit + credit * percentage;
-        }
-        if ( payment <=0 || credit <=0 ) throw new Exception("throws Exception…");
-        if ( payment <= credit * percentage) throw new Exception("throws Exception…");
+        } else   throw new Exception("throws Exception…");
+
 
 
         while ( credit > 0 ){
-            if ( counter / 12 == 1 ) {
-                totalSumPayed += totalSumPayed + credit * percentage;
+            if ( counter / 13 == 1 ) {
+                totalSumPayed +=  credit * percentage;
                 credit = credit + credit * percentage;
-
                 counter = 1;
             }
 
