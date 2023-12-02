@@ -13,7 +13,7 @@ public class CreditCalculator {
         int counter = 1;
         double totalSumPayed = 0;
         double startSumm;
-        double overPay;
+        double overPay = 0;
 
         if ( task.length !=4) throw new Exception("throws Exception…");
 
@@ -27,12 +27,20 @@ public class CreditCalculator {
 
         if (clientType.equals("human")){
             if (12 * payment <= credit * percentage)  throw new Exception("throws Exception…");
+
             totalSumPayed = credit + credit * percentage;
+            overPay += credit * percentage;
             credit = credit + credit * percentage;
         }else if (clientType.equals("business")){
             credit = credit - 12 * payment;
-            totalSumPayed = ( credit + credit * percentage ) + 12 * payment;
+            if (credit < 0) {
+                totalSumPayed = startSumm; credit = 0;
+            }
+            else totalSumPayed = ( credit + credit * percentage ) + 12 * payment;
+
             if (12 * payment <= credit * percentage)  throw new Exception("throws Exception…");
+
+            overPay += credit * percentage;
             credit = credit + credit * percentage;
         } else   throw new Exception("throws Exception…");
 
@@ -41,14 +49,15 @@ public class CreditCalculator {
         while ( credit > 0 ){
             if ( counter / 13 == 1 ) {
                 totalSumPayed +=  credit * percentage;
+                overPay += credit * percentage;
                 credit = credit + credit * percentage;
                 counter = 1;
             }
 
             credit = credit - payment;
             counter += 1;
+
         }
-        overPay = totalSumPayed - startSumm;
         System.out.println( overPay  );
         System.out.printf("// общая сумма к оплате %.0f " ,totalSumPayed);
     };
